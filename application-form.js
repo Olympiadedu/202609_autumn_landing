@@ -1,4 +1,21 @@
 ﻿let database = window.scheduleDatabase;
+database = database || {
+  campuses: [],
+  subjects: [],
+  scheduleRules: {
+    basic: [],
+    special: [],
+  },
+};
+const campaignCampusIds = [
+  "gwangjin",
+  "seongdong",
+  "dongdaemun",
+  "jungnang",
+  "songpa",
+  "junggye",
+  "misa",
+];
 const calendarMonths = [
   { year: 2026, month: 8 },
 ];
@@ -293,7 +310,7 @@ async function loadRemoteCampusOptions() {
   const gasWebAppUrl = window.appConfig?.gasWebAppUrl;
   if (!gasWebAppUrl) return;
 
-  const allowedCampusIds = database.campuses.map((campus) => campus.id);
+  const allowedCampusIds = campaignCampusIds;
   const result = await loadJsonp(gasWebAppUrl, { action: "campus-options" });
   if (!result?.ok || !result.data?.campuses?.length || !result.data?.subjects?.length) {
     return;
