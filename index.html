@@ -1,0 +1,1929 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>올림피아드교육 2026 가을학기 | 학력진단평가 신청</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: #f5f5f5; word-break: keep-all; }
+        .wrap { max-width: 540px; margin: 0 auto; background: #fff; min-height: 100vh; display: flex; flex-direction: column; box-shadow: 0 0 40px rgba(0,0,0,0.07); }
+
+        /* sticky CTA bar */
+        .sticky-cta {
+            position: fixed;
+            bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 100%; max-width: 540px;
+            background: rgba(10,10,10,0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 14px 20px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .sticky-cta.hidden-bar {
+            transform: translateX(-50%) translateY(100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .sticky-cta-text { flex: 1; }
+        .sticky-cta-text .label { font-size: 11px; color: #999; font-weight: 600; }
+        .sticky-cta-text .value { font-size: 15px; color: #fff; font-weight: 900; line-height: 1.3; }
+        .sticky-cta-btn {
+            background: #f97316;
+            color: #fff;
+            font-weight: 900;
+            font-size: 15px;
+            padding: 12px 22px;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: background 0.15s;
+        }
+        .sticky-cta-btn:hover { background: #ea6d08; }
+
+        /* page bottom padding so sticky bar doesn't overlap content */
+        .page-bottom-pad { height: 80px; }
+
+        /* hero */
+        .hero { background: #0a0a0a; color: #fff; padding: 56px 24px 48px; }
+        .hero-tag { display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,0.25); color: #ccc; font-size: 13px; font-weight: 700; padding: 6px 14px; border-radius: 100px; margin-bottom: 24px; }
+        .hero h1 { font-size: 36px; font-weight: 900; line-height: 1.35; letter-spacing: -0.5px; margin-bottom: 16px; }
+        .hero h1 em { color: #f97316; font-style: normal; }
+        .hero-sub { font-size: 17px; color: #bbb; line-height: 1.7; margin-bottom: 36px; }
+        .hero-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 36px; }
+        .hero-stat { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 18px 10px; text-align: center; }
+        .hero-stat .num { font-size: 22px; font-weight: 900; color: #f97316; }
+        .hero-stat .desc { font-size: 13px; color: #aaa; margin-top: 4px; }
+        .hero-cta { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: #f97316; color: #fff; font-weight: 900; font-size: 18px; padding: 18px; border-radius: 18px; text-decoration: none; transition: background 0.15s; }
+        .hero-cta:hover { background: #ea6d08; }
+        .hero-notice { text-align: center; color: #888; font-size: 13px; margin-top: 12px; }
+
+        /* section common */
+        section { padding: 60px 24px; }
+        .sec-tag { font-size: 12px; font-weight: 800; color: #f97316; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+        .sec-title { font-size: 26px; font-weight: 900; color: #0a0a0a; line-height: 1.35; letter-spacing: -0.3px; margin-bottom: 32px; }
+        .sec-title em { color: #f97316; font-style: normal; }
+
+        /* pain points */
+        .pain-list { display: flex; flex-direction: column; gap: 10px; }
+        .pain-item { display: flex; gap: 14px; align-items: flex-start; background: #fafafa; border: 1px solid #eee; border-radius: 16px; padding: 18px; }
+        .pain-badge { flex-shrink: 0; background: #0a0a0a; color: #fff; font-size: 11px; font-weight: 800; padding: 4px 9px; border-radius: 6px; margin-top: 2px; white-space: nowrap; }
+        .pain-item p { font-size: 15px; color: #222; font-weight: 600; line-height: 1.6; }
+        .pain-alert { margin-top: 20px; background: #1a1a1a; border-radius: 16px; padding: 20px; color: #ddd; font-size: 15px; font-weight: 500; line-height: 1.7; }
+        .pain-alert strong { color: #f97316; }
+
+        /* image section */
+        .img-section { background: #fafafa; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+        .img-wrap { border-radius: 20px; overflow: hidden; border: 1px solid #eee; margin-bottom: 20px; }
+        .img-wrap img { width: 100%; height: auto; display: block; }
+        .check-list { display: flex; flex-direction: column; gap: 10px; }
+        .check-item { display: flex; align-items: center; gap: 12px; font-size: 16px; font-weight: 700; color: #1a1a1a; }
+        .check-dot { width: 28px; height: 28px; border-radius: 50%; background: #f97316; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+        .img-desc { margin-top: 16px; padding-top: 16px; border-top: 1px solid #eee; font-size: 14px; color: #555; line-height: 1.75; }
+
+        /* steps */
+        .steps-wrap { display: flex; flex-direction: column; gap: 16px; }
+        .step-card { border: 1px solid #e8e8e8; border-radius: 20px; padding: 24px; }
+        .step-header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+        .step-num { height: 48px; padding: 0 16px; border-radius: 14px; background: #0a0a0a; color: #f97316; font-size: 15px; font-weight: 900; display: flex; align-items: center; justify-content: center; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.03em; }
+        .step-title { font-size: 18px; font-weight: 900; color: #0a0a0a; line-height: 1.35; }
+        .step-title em { color: #f97316; font-style: normal; }
+        .step-body { font-size: 14px; color: #444; line-height: 1.8; margin-bottom: 16px; }
+        .step-badge { display: flex; justify-content: space-between; align-items: center; background: #f5f5f5; border-radius: 12px; padding: 13px 16px; }
+        .step-badge .label { font-size: 13px; color: #777; font-weight: 600; }
+        .step-badge .value { font-size: 14px; color: #0a0a0a; font-weight: 900; }
+        .step-badge .value i { color: #f97316; margin-right: 4px; }
+        .steps-note { margin-top: 14px; background: #fafafa; border: 1px solid #eee; border-radius: 14px; padding: 14px 16px; font-size: 13px; color: #666; line-height: 1.7; }
+
+        /* form section */
+        .form-section { background: #fafafa; border-top: 1px solid #eee; text-align: center; }
+        .form-wrap { background: #fff; border: 1px solid #e5e5e5; border-radius: 24px; padding: 24px; text-align: left; }
+        .form-field { margin-bottom: 18px; }
+        .form-field label { display: block; font-size: 14px; font-weight: 800; color: #222; margin-bottom: 8px; }
+        .form-field label b { color: #f97316; }
+        .form-field input, .form-field select {
+            width: 100%; height: 50px; border: 1.5px solid #e5e5e5; border-radius: 14px;
+            padding: 0 16px; font-size: 15px; color: #111; outline: none;
+            font-family: 'Noto Sans KR', sans-serif;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            background: #fff;
+        }
+        .form-field input:focus, .form-field select:focus { border-color: #f97316; box-shadow: 0 0 0 4px rgba(249,115,22,0.1); }
+        .form-field input::placeholder { color: #bbb; }
+        .form-field select:disabled { background: #f5f5f5; color: #bbb; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .date-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+        .date-box { background: #fafafa; border: 1.5px solid #eee; border-radius: 14px; padding: 12px 14px; }
+        .date-box .lbl { font-size: 11px; font-weight: 700; color: #bbb; }
+        .date-box strong { display: block; font-size: 13px; color: #111; font-weight: 900; margin-top: 3px; }
+
+        /* calendar */
+        .cal-wrap { border: 1.5px solid #eee; border-radius: 18px; overflow: hidden; margin-bottom: 18px; }
+        .cal-head { display: flex; align-items: center; justify-content: center; gap: 28px; height: 58px; border-bottom: 1px solid #eee; }
+        .cal-head button { display: none; width: 36px; height: 36px; font-size: 22px; color: #aaa; border: none; background: none; cursor: pointer; }
+        .cal-head strong { font-size: 15px; font-weight: 900; color: #111; }
+        .cal-days-header { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); text-align: center; font-size: 11px; font-weight: 800; color: #bbb; padding: 10px 0 8px; border-bottom: 1px solid #eee; }
+        .cal-days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; padding: 10px 6px; min-width: 0; }
+        .cal-days > span { min-width: 0; }
+        .cal-day {
+            width: clamp(34px, 10.2vw, 44px);
+            height: clamp(34px, 10.2vw, 44px);
+            min-width: 0;
+            line-height: 1;
+        }
+        .cal-day small { font-size: clamp(8px, 2.3vw, 9px); margin-top: 1px; }
+        @media (max-width: 380px) {
+            section { padding-left: 18px; padding-right: 18px; }
+            .form-wrap { padding: 18px; }
+            .cal-days { padding-left: 4px; padding-right: 4px; gap: 1px; }
+        }
+
+        /* time */
+        .time-wrap { background: #fafafa; border: 1.5px solid #eee; border-radius: 16px; padding: 16px; margin-bottom: 18px; }
+        .time-wrap h4 { font-size: 13px; font-weight: 800; color: #333; margin-bottom: 12px; }
+
+        .form-note { font-size: 12px; color: #999; line-height: 1.65; margin-bottom: 14px; }
+        .form-status { min-height: 20px; font-size: 13px; font-weight: 700; color: #f97316; margin-bottom: 14px; }
+        .privacy-consent {
+            margin: 0 0 16px;
+            overflow: hidden;
+            border: 1.5px solid #dedbd7;
+            border-radius: 16px;
+            background: #f7f5f3;
+        }
+        .privacy-details summary {
+            position: relative;
+            display: flex;
+            align-items: center;
+            min-height: 50px;
+            padding: 12px 46px 12px 14px;
+            color: #111;
+            cursor: pointer;
+            list-style: none;
+            user-select: none;
+        }
+        .privacy-details summary::-webkit-details-marker { display: none; }
+        .privacy-details summary::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: 18px;
+            width: 9px;
+            height: 9px;
+            border-right: 2px solid #111;
+            border-bottom: 2px solid #111;
+            transform: translateY(-70%) rotate(45deg);
+            transition: transform .18s ease;
+        }
+        .privacy-details[open] summary::after {
+            transform: translateY(-20%) rotate(225deg);
+        }
+        .privacy-summary-title {
+            font-size: 14px;
+            font-weight: 900;
+        }
+        .privacy-summary-hint {
+            margin-left: 5px;
+            color: #666;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        .privacy-box {
+            height: 130px;
+            overflow-y: auto;
+            border: 0;
+            border-top: 1px solid #dedbd7;
+            border-radius: 0;
+            background: #fff;
+            padding: 14px;
+            color: #444;
+            font-size: 12px;
+            line-height: 1.75;
+        }
+        .privacy-box h4 { color: #111; font-size: 13px; font-weight: 900; margin: 16px 0 6px; }
+        .privacy-box h4:first-child { margin-top: 0; }
+        .privacy-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin: 0;
+            padding: 12px 14px;
+            border-top: 1px solid #dedbd7;
+            color: #222;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.45;
+        }
+        .privacy-check input {
+            width: 17px;
+            height: 17px;
+            margin-top: 1px;
+            flex-shrink: 0;
+            accent-color: #f97316;
+        }
+        .submit-btn {
+            width: 100%; background: #0a0a0a; color: #fff; font-weight: 900; font-size: 16px;
+            padding: 18px; border-radius: 16px; border: none; cursor: pointer;
+            font-family: 'Noto Sans KR', sans-serif;
+            transition: background 0.15s;
+        }
+        .submit-btn:hover { background: #222; }
+        .submit-btn:disabled { background: #cfcfcf; cursor: not-allowed; }
+
+        /* completion modal */
+        .complete-modal[hidden] { display: none; }
+        .complete-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 22px;
+            background: rgba(10,10,10,0.58);
+        }
+        .complete-box {
+            width: 100%;
+            max-width: 420px;
+            background: #fff;
+            border-radius: 22px;
+            padding: 28px 22px 22px;
+            text-align: center;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.22);
+        }
+        .complete-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f97316;
+            color: #fff;
+            font-size: 24px;
+        }
+        .complete-box h3 { font-size: 24px; font-weight: 900; color: #0a0a0a; margin-bottom: 10px; }
+        .complete-box p { font-size: 15px; font-weight: 700; color: #333; line-height: 1.7; margin-bottom: 18px; }
+        .complete-box .complete-note {
+            background: #fff7ed;
+            border: 2px solid #fb923c;
+            border-radius: 16px;
+            padding: 18px 14px;
+            color: #c2410c;
+            font-size: 21px;
+            font-weight: 900;
+            line-height: 1.45;
+            letter-spacing: 0;
+            box-shadow: 0 10px 24px rgba(249,115,22,0.16);
+        }
+        .complete-box .complete-note strong {
+            display: inline-block;
+            margin-top: 2px;
+            color: #ea580c;
+            font-size: 28px;
+            line-height: 1.2;
+        }
+        .complete-box .complete-caption {
+            margin: -4px 2px 0;
+            color: #777;
+            font-size: 11px;
+            font-weight: 500;
+            line-height: 1.55;
+        }
+        .complete-close {
+            width: 100%;
+            margin-top: 18px;
+            border: none;
+            border-radius: 14px;
+            background: #0a0a0a;
+            color: #fff;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 15px;
+            font-weight: 900;
+            padding: 15px;
+            cursor: pointer;
+        }
+
+        /* footer */
+        footer { background: #0a0a0a; padding: 40px 24px; color: #888; font-size: 13px; }
+        .footer-links { display: flex; gap: 20px; border-bottom: 1px solid #2a2a2a; padding-bottom: 16px; margin-bottom: 16px; }
+        .footer-links a { color: #bbb; font-weight: 700; font-size: 14px; text-decoration: none; }
+        .footer-links a:hover { color: #fff; }
+        .footer-info { line-height: 1.9; color: #888; }
+        .footer-info .name { color: #ddd; font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+        .footer-copy { margin-top: 16px; padding-top: 16px; border-top: 1px solid #2a2a2a; color: #555; font-size: 12px; }
+
+        /* campus guide */
+        .campus-guide { background: #fff; border-top: 1px solid #eee; padding: 30px 24px; }
+        .campus-guide-title { color: #111; font-size: 18px; font-weight: 900; margin-bottom: 6px; }
+        .campus-guide-desc { color: #777; font-size: 12px; line-height: 1.6; margin-bottom: 16px; }
+        .campus-group { border-top: 1px solid #eee; padding: 13px 0; }
+        .campus-group:first-of-type { border-top: none; padding-top: 0; }
+        .campus-group h3 { color: #111; font-size: 14px; font-weight: 900; margin-bottom: 8px; }
+        .campus-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; }
+        .campus-item { color: #555; font-size: 12px; line-height: 1.45; white-space: nowrap; }
+        .campus-name { color: #222; font-weight: 700; margin-right: 4px; }
+        .campus-phone { color: #444; font-weight: 500; text-decoration: none; }
+        .campus-divider { color: #bbb; margin: 0 4px; }
+        .campus-location {
+            color: #f97316;
+            font-weight: 800;
+            text-decoration: none;
+        }
+        @media (max-width: 430px) {
+            .campus-list { grid-template-columns: 1fr; gap: 5px; }
+        }
+
+        /* header */
+        .top-header { position: relative; z-index: 1; background: #fff; border-bottom: 1px solid #eee; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+        .top-badge { display: inline-flex; align-items: center; font-size: 11px; background: #ff4040; color: #fff; font-weight: 800; padding: 6px 12px; border-radius: 100px; animation: pulse 2.5s ease-in-out infinite; text-decoration: none; }
+        .top-logo { width: auto; height: 28px; flex: 0 0 auto; object-fit: contain; }
+        .top-brand-logos { display: flex; align-items: center; justify-content: flex-end; gap: 7px; min-width: 0; }
+        .top-brand-logos img { display: block; width: auto; max-width: 100%; object-fit: contain; }
+        .top-brand-logos .logo-u2m { height: 25px; }
+        .top-brand-logos .logo-academy { height: 23px; }
+        .top-brand-logos .logo-glec { height: 25px; }
+        @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+
+        /* 2026 가을학기 캠페인 */
+        :root {
+            --fall-green: #00a97f;
+            --fall-deep: #053f36;
+            --fall-pale: #eaf8f3;
+            --fall-yellow: #ffe36e;
+            --fall-ink: #102a26;
+        }
+        .top-badge { background: var(--fall-green); animation: none; }
+        .hero {
+            position: relative;
+            min-height: 610px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 56px 24px 42px;
+            overflow: hidden;
+            background: var(--fall-deep);
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(1,31,27,0.08) 0%, rgba(1,31,27,0.28) 35%, rgba(1,31,27,0.95) 100%);
+        }
+        .hero > * { position: relative; z-index: 1; }
+        .hero-tag {
+            align-self: flex-start;
+            margin-bottom: 18px;
+            border: 1px solid rgba(255,255,255,0.38);
+            background: rgba(0,0,0,0.22);
+            color: #fff;
+            backdrop-filter: blur(6px);
+        }
+        .hero h1 { margin-bottom: 15px; font-size: 35px; line-height: 1.28; letter-spacing: -1.1px; }
+        .hero h1 em { color: var(--fall-yellow); }
+        .hero-sub { margin-bottom: 22px; color: rgba(255,255,255,0.82); font-size: 15px; line-height: 1.65; }
+        .hero-proof {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-bottom: 22px;
+        }
+        .hero-proof span {
+            padding: 7px 10px;
+            border: 1px solid rgba(255,255,255,0.22);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.2);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 800;
+        }
+        .hero-cta { background: var(--fall-green); border-radius: 14px; }
+        .hero-cta:hover { background: #008f6c; }
+        .hero-notice { color: rgba(255,255,255,0.68); }
+        .sticky-cta { background: rgba(5,63,54,0.96); }
+        .sticky-cta-btn { background: var(--fall-green); }
+        .sticky-cta-btn:hover { background: #008f6c; }
+        .sec-tag, .sec-title em, .pain-alert strong, .form-field label b,
+        .form-status, .campus-location { color: var(--fall-green); }
+        .check-dot, .complete-icon { background: var(--fall-green); }
+        .form-field input:focus, .form-field select:focus {
+            border-color: var(--fall-green);
+            box-shadow: 0 0 0 4px rgba(0,169,127,0.1);
+        }
+        .privacy-check input { accent-color: var(--fall-green); }
+        .reason-section { background: #fff; }
+        .reason-intro {
+            margin: -4px 0 26px;
+            color: #66716f;
+            font-size: 15px;
+            line-height: 1.75;
+        }
+        .reason-list { display: flex; flex-direction: column; gap: 12px; }
+        .reason-card {
+            display: grid;
+            grid-template-columns: 40px 1fr;
+            gap: 14px;
+            padding: 20px;
+            border: 1px solid #e5ece9;
+            border-radius: 16px;
+            background: #fbfdfc;
+        }
+        .reason-card .num {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--fall-pale);
+            color: var(--fall-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 900;
+        }
+        .reason-card strong { display: block; margin-bottom: 6px; color: var(--fall-ink); font-size: 16px; }
+        .reason-card p { color: #65706e; font-size: 13px; line-height: 1.65; }
+        .student-visual {
+            margin-top: 24px;
+            overflow: hidden;
+            border-radius: 18px;
+        }
+        .student-visual img {
+            display: block;
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            object-position: center 46%;
+        }
+        .report-section { background: var(--fall-deep); color: #fff; }
+        .report-section .sec-tag { color: #72dfbd; }
+        .report-section .sec-title { color: #fff; }
+        .report-section .sec-title em { color: var(--fall-yellow); }
+        .report-layout {
+            display: grid;
+            grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+            gap: 18px;
+            align-items: center;
+        }
+        .report-visual {
+            padding: 10px;
+            border-radius: 16px;
+            background: #fff;
+            box-shadow: 0 18px 36px rgba(0,0,0,0.26);
+        }
+        .report-visual img { display: block; width: 100%; height: auto; border-radius: 8px; }
+        .report-points { display: flex; flex-direction: column; gap: 8px; }
+        .report-point {
+            padding: 11px 12px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 11px;
+            background: rgba(255,255,255,0.07);
+        }
+        .report-point strong { display: block; color: var(--fall-yellow); font-size: 12px; margin-bottom: 3px; }
+        .report-point p { color: rgba(255,255,255,0.72); font-size: 11px; line-height: 1.5; }
+        .report-note { margin-top: 18px; color: rgba(255,255,255,0.6); font-size: 11px; line-height: 1.65; }
+        .consult-section { background: var(--fall-pale); }
+        .consult-card {
+            overflow: hidden;
+            border-radius: 20px;
+            background: #fff;
+            box-shadow: 0 16px 36px rgba(5,63,54,0.1);
+        }
+        .consult-card img { display: block; width: 100%; height: 270px; object-fit: cover; }
+        .consult-copy { padding: 22px; }
+        .consult-copy strong { display: block; color: var(--fall-green); font-size: 13px; margin-bottom: 8px; }
+        .consult-copy h3 { color: var(--fall-ink); font-size: 21px; line-height: 1.4; font-weight: 900; }
+        .consult-copy p { margin-top: 10px; color: #65706e; font-size: 14px; line-height: 1.75; }
+        .step-card { border-color: #dfe9e5; box-shadow: 0 10px 28px rgba(5,63,54,0.05); }
+        .step-num { background: var(--fall-deep); color: var(--fall-yellow); }
+        .step-title em, .step-badge .value i { color: var(--fall-green); }
+        .step-badge { background: var(--fall-pale); }
+        .event-date {
+            margin-bottom: 20px;
+            padding: 18px;
+            border-radius: 16px;
+            background: var(--fall-deep);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .event-date span { color: #8ce5c9; font-size: 11px; font-weight: 800; }
+        .event-date strong { font-size: 18px; }
+        .complete-box .complete-note {
+            background: var(--fall-pale);
+            border-color: var(--fall-green);
+            color: var(--fall-deep);
+            box-shadow: 0 10px 24px rgba(0,169,127,0.14);
+        }
+        .complete-box .complete-note strong { color: var(--fall-green); }
+        @media (max-width: 430px) {
+            .hero { min-height: 590px; }
+            .hero h1 { font-size: 31px; }
+            .report-layout { grid-template-columns: 1fr; }
+            .report-visual { max-width: 260px; margin: 0 auto; }
+            .report-points { display: grid; grid-template-columns: 1fr 1fr; }
+            .report-point { min-height: 90px; }
+        }
+
+        /* 가을학기 캠페인 v2: 이미지 중심 편집형 디자인 */
+        .campaign-hero { background: #f3efe6; }
+        .campaign-photo {
+            position: relative;
+            height: 360px;
+            background: #fff7ed;
+        }
+        .campaign-photo::after {
+            content: "DIAGNOSIS  /  2026 AUTUMN";
+            position: absolute;
+            left: 20px;
+            bottom: 18px;
+            padding: 8px 11px;
+            background: #ffe46b;
+            color: #173f38;
+            font: 900 10px/1 "Noto Sans KR", sans-serif;
+            letter-spacing: .08em;
+        }
+        .campaign-copy {
+            position: relative;
+            margin-top: -34px;
+            padding: 30px 24px 34px;
+            background: #fff;
+            border-radius: 28px 28px 0 0;
+        }
+        .campaign-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 18px;
+            color: #05775f;
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: -.02em;
+        }
+        .campaign-eyebrow::before { content: ""; width: 28px; height: 2px; background: #00a97f; }
+        .campaign-title {
+            color: #122a26;
+            font-size: 36px;
+            font-weight: 900;
+            line-height: 1.25;
+            letter-spacing: -1.7px;
+        }
+        .campaign-title em { color: #008c70; font-style: normal; }
+        .campaign-sub {
+            margin-top: 17px;
+            color: #5b6865;
+            font-size: 15px;
+            line-height: 1.75;
+        }
+        .outcome-line {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            margin: 24px 0;
+            border-top: 1px solid #dce5e2;
+            border-bottom: 1px solid #dce5e2;
+        }
+        .outcome-line span {
+            padding: 14px 4px;
+            color: #24423c;
+            font-size: 11px;
+            font-weight: 800;
+            text-align: center;
+        }
+        .outcome-line span + span { border-left: 1px solid #dce5e2; }
+        .campaign-cta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 18px 20px;
+            background: #063f35;
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 900;
+        }
+        .campaign-cta i { color: #ffe46b; }
+        .campaign-note { margin-top: 11px; color: #8a9390; font-size: 11px; text-align: right; }
+        .editorial-section { padding: 72px 24px; background: #f7f5ef; }
+        .editorial-kicker {
+            margin-bottom: 11px;
+            color: #008c70;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: .12em;
+        }
+        .editorial-title {
+            color: #162b27;
+            font-size: 29px;
+            line-height: 1.38;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+        .editorial-title mark { background: linear-gradient(transparent 58%, #ffe46b 58%); color: inherit; }
+        .diagnosis-ledger { margin-top: 34px; border-top: 2px solid #173f38; }
+        .ledger-row {
+            display: grid;
+            grid-template-columns: 44px 1fr;
+            gap: 14px;
+            padding: 22px 0;
+            border-bottom: 1px solid #cfd8d4;
+        }
+        .ledger-no { color: #00a97f; font: 900 12px/1.4 "Noto Sans KR", sans-serif; }
+        .ledger-row strong { display: block; margin-bottom: 6px; color: #173f38; font-size: 17px; }
+        .ledger-row p { color: #64716e; font-size: 13px; line-height: 1.65; }
+        .report-showcase { padding: 72px 18px; background: #0c382f; color: #fff; overflow: hidden; }
+        .report-showcase .editorial-kicker { color: #78dec1; padding: 0 6px; }
+        .report-showcase .editorial-title { color: #fff; padding: 0 6px; }
+        .report-showcase .editorial-title mark { color: #fff; background: linear-gradient(transparent 58%, rgba(255,228,107,.45) 58%); }
+        .report-stage {
+            position: relative;
+            margin-top: 32px;
+            padding: 9px;
+            background: #fff;
+            box-shadow: 0 24px 50px rgba(0,0,0,.28);
+        }
+        .report-stage img { display: block; width: 100%; height: auto; }
+        .report-callout {
+            position: absolute;
+            max-width: 145px;
+            padding: 9px 11px;
+            background: #ffe46b;
+            color: #143c34;
+            box-shadow: 0 8px 20px rgba(0,0,0,.18);
+            font-size: 10px;
+            line-height: 1.45;
+        }
+        .report-callout b { display: block; font-size: 12px; }
+        .callout-a { left: 1px; top: 15%; transform: translateX(-3px); }
+        .callout-b { right: 1px; top: 34%; transform: translateX(3px); }
+        .callout-c { left: 1px; bottom: 7%; transform: translateX(-3px); }
+        .report-caption {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1px;
+            margin-top: 18px;
+            background: rgba(255,255,255,.16);
+        }
+        .report-caption div { min-height: 96px; padding: 15px; background: #0c382f; }
+        .report-caption b { display: block; margin-bottom: 5px; color: #ffe46b; font-size: 12px; }
+        .report-caption p { color: rgba(255,255,255,.7); font-size: 11px; line-height: 1.55; }
+        .report-disclaimer { margin: 16px 6px 0; color: rgba(255,255,255,.48); font-size: 10px; line-height: 1.6; }
+        .roadmap-band { padding: 68px 24px; background: #fff; }
+        .roadmap-flow { margin-top: 30px; }
+        .roadmap-step {
+            display: grid;
+            grid-template-columns: 70px 1fr;
+            align-items: start;
+            gap: 14px;
+            padding: 19px 0;
+            border-bottom: 1px solid #e0e7e4;
+        }
+        .roadmap-step span { color: #008c70; font-size: 11px; font-weight: 900; letter-spacing: .08em; }
+        .roadmap-step strong { display: block; color: #173f38; font-size: 17px; }
+        .roadmap-step p { margin-top: 6px; color: #697471; font-size: 13px; line-height: 1.65; }
+        .benefit-editorial { padding: 72px 24px; background: #f1f7f4; }
+        .benefit-list { margin-top: 30px; counter-reset: benefit; }
+        .benefit-item {
+            position: relative;
+            padding: 24px 0 24px 60px;
+            border-top: 1px solid #cbd9d4;
+        }
+        .benefit-item:last-child { border-bottom: 1px solid #cbd9d4; }
+        .benefit-item::before {
+            counter-increment: benefit;
+            content: "0" counter(benefit);
+            position: absolute;
+            left: 0;
+            top: 24px;
+            color: #00a97f;
+            font-size: 20px;
+            font-weight: 900;
+        }
+        .benefit-item strong { color: #173f38; font-size: 18px; }
+        .benefit-item p { margin-top: 7px; color: #66736f; font-size: 13px; line-height: 1.7; }
+        .benefit-item em { color: #008c70; font-style: normal; }
+        @media (max-width: 430px) {
+            .campaign-photo { height: 330px; background-position: 62% center; }
+            .campaign-title { font-size: 32px; }
+            .report-callout { max-width: 124px; font-size: 9px; }
+        }
+
+        /* v3 밝은 컬러 시스템 · 가독성 강화 */
+        :root {
+            --fall-green: #ff6b4a;
+            --fall-deep: #243b67;
+            --fall-pale: #fff2e9;
+            --fall-yellow: #ffd95a;
+            --fall-ink: #202d49;
+        }
+        body { color: #29344c; background: #f4f6fb; }
+        .top-header { border-bottom-color: #e7eaf2; }
+        .top-badge { background: #ff6b4a; box-shadow: 0 5px 14px rgba(255,107,74,.22); }
+        .campaign-hero { background: #fff7ed; }
+        .campaign-photo::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,246,230,.08), rgba(255,220,174,.16));
+        }
+        .campaign-photo::after { background: #ffd95a; color: #263451; }
+        .campaign-copy { background: #fffdf9; box-shadow: 0 -12px 30px rgba(38,52,81,.06); }
+        .campaign-eyebrow { color: #e24f33; }
+        .campaign-eyebrow::before { background: #ff6b4a; }
+        .campaign-title { color: #202d49; }
+        .campaign-title em { color: #f05b3d; }
+        .campaign-sub { color: #4d5870; font-size: 16px; line-height: 1.8; }
+        .outcome-line { border-color: #dfe4ee; }
+        .outcome-line span { color: #33415c; font-size: 12px; }
+        .outcome-line span + span { border-color: #dfe4ee; }
+        .campaign-cta { background: #3f67e8; border-radius: 12px; box-shadow: 0 10px 24px rgba(63,103,232,.22); }
+        .campaign-cta i { color: #fff; }
+        .campaign-note { color: #707b91; font-size: 12px; }
+        .editorial-section { background: #fff4e9; }
+        .editorial-kicker { color: #e75438; font-size: 12px; }
+        .editorial-title { color: #202d49; }
+        .editorial-title mark { background: linear-gradient(transparent 58%, #ffd95a 58%); }
+        .diagnosis-ledger { border-top-color: #344c83; }
+        .ledger-row { border-bottom-color: #ded8d1; }
+        .ledger-no { color: #f05b3d; font-size: 13px; }
+        .ledger-row strong { color: #263451; font-size: 18px; }
+        .ledger-row p { color: #505d73; font-size: 14px; line-height: 1.75; }
+        .report-showcase { background: #eaf4ff; color: #202d49; }
+        .report-showcase .editorial-kicker { color: #3563d8; }
+        .report-showcase .editorial-title { color: #202d49; }
+        .report-showcase .editorial-title mark {
+            color: #202d49;
+            background: linear-gradient(transparent 58%, #bfe5ff 58%);
+        }
+        .report-stage { border-radius: 18px; box-shadow: 0 18px 42px rgba(47,77,135,.18); }
+        .report-stage img { border-radius: 11px; }
+        .report-callout { max-width: 154px; color: #263451; font-size: 11px; line-height: 1.55; box-shadow: 0 8px 20px rgba(46,68,111,.18); }
+        .report-callout b { font-size: 14px; }
+        .callout-a { background: #ffd95a; }
+        .callout-b { background: #ff9278; color: #42241f; }
+        .callout-c { background: #fff; border: 2px solid #4c73e8; }
+        .report-caption { gap: 10px; background: transparent; }
+        .report-caption div {
+            min-height: 116px;
+            padding: 17px;
+            background: #fff;
+            border: 1px solid #d8e6f6;
+            border-radius: 12px;
+            box-shadow: 0 7px 18px rgba(47,77,135,.07);
+        }
+        .report-caption b { color: #315ac9; font-size: 14px; }
+        .report-caption p { color: #4c5970; font-size: 13px; line-height: 1.7; }
+        .report-disclaimer { color: #65738b; font-size: 11px; line-height: 1.7; }
+        .roadmap-band { background: #fff; }
+        .roadmap-step { border-bottom-color: #e1e5ed; }
+        .roadmap-step span { color: #f05b3d; font-size: 12px; }
+        .roadmap-step strong { color: #263451; font-size: 18px; }
+        .roadmap-step p { color: #526077; font-size: 14px; line-height: 1.75; }
+        .benefit-editorial { background: #fff9db; }
+        .benefit-item { border-color: #e4dca9; }
+        .benefit-item::before { color: #3f67e8; }
+        .benefit-item strong { color: #263451; }
+        .benefit-item p { color: #505d73; font-size: 14px; line-height: 1.75; }
+        .benefit-item em { color: #e45136; }
+        .steps-note { background: rgba(255,255,255,.72); border-color: #eadfae; color: #59647a; font-size: 13px; }
+        .form-section { background: #f6f6f3; border-top: 0; }
+        .form-wrap {
+            background: #fff;
+            border-color: #dedfdc;
+            border-radius: 8px;
+            box-shadow: none;
+        }
+        .form-field label { color: #263451; }
+        .form-field label b, .sec-tag { color: #f05b3d; }
+        .form-status { color: #e8523e; }
+        .form-field input,
+        .form-field select { border-radius: 6px; }
+        .form-field input:focus, .form-field select:focus {
+            border-color: #e8523e;
+            box-shadow: 0 0 0 3px rgba(232,82,62,.1);
+        }
+        .date-box { border-radius: 6px; }
+        .cal-wrap { border-radius: 8px; }
+        .time-wrap { border-radius: 8px; background: #f8f8f6; }
+        .privacy-consent { border-radius: 8px; }
+        .privacy-check input { accent-color: #e8523e; }
+        .submit-btn {
+            border-radius: 6px;
+            background: #e8523e;
+            box-shadow: 0 7px 16px rgba(232,82,62,.2);
+        }
+        .submit-btn:hover { background: #d44231; }
+        .sticky-cta { background: rgba(36,59,103,.96); }
+        .sticky-cta-btn { border-radius: 6px; background: #e8523e; }
+        .sticky-cta-btn:hover { background: #d44231; }
+        .campus-guide { background: #fff; }
+        footer { background: #263451; }
+        @media (max-width: 430px) {
+            .campaign-title { font-size: 34px; }
+            .campaign-sub { font-size: 15px; }
+            .editorial-title { font-size: 28px; }
+            .report-callout { max-width: 132px; font-size: 10px; }
+            .report-caption { grid-template-columns: 1fr; }
+            .report-caption div { min-height: auto; }
+        }
+
+        /* v4 카피 중심 메인 포스터 */
+        .campaign-hero {
+            position: relative;
+            overflow: hidden;
+            min-height: 650px;
+            background:
+                radial-gradient(circle at 90% 12%, #ff8a68 0 72px, transparent 73px),
+                linear-gradient(145deg, #fff6cf 0%, #fff9e8 58%, #eaf4ff 100%);
+        }
+        .campaign-hero::before {
+            content: "02";
+            position: absolute;
+            right: -12px;
+            top: 34px;
+            color: rgba(63,103,232,.09);
+            font: 900 190px/1 "Noto Sans KR", sans-serif;
+            letter-spacing: -.09em;
+        }
+        .poster-bar {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 24px 0;
+        }
+        .poster-code {
+            color: #3f67e8;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: .12em;
+        }
+        .poster-chip {
+            padding: 8px 12px;
+            border: 2px solid #202d49;
+            border-radius: 100px;
+            background: #fff;
+            color: #202d49;
+            font-size: 11px;
+            font-weight: 900;
+            transform: rotate(3deg);
+        }
+        .campaign-copy {
+            position: relative;
+            z-index: 2;
+            margin: 0;
+            padding: 58px 24px 44px;
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        .campaign-copy::before {
+            content: "";
+            display: block;
+            width: 46px;
+            height: 7px;
+            margin-bottom: 23px;
+            background: #ff6b4a;
+        }
+        .campaign-eyebrow { margin-bottom: 14px; color: #3f67e8; font-size: 13px; }
+        .campaign-eyebrow::before { display: none; }
+        .campaign-title {
+            max-width: 440px;
+            color: #202d49;
+            font-size: 47px;
+            line-height: 1.14;
+            letter-spacing: -2.4px;
+        }
+        .campaign-title .poster-highlight {
+            display: inline-block;
+            margin-top: 5px;
+            padding: 2px 8px 5px;
+            background: #3f67e8;
+            color: #fff;
+            transform: rotate(-1deg);
+        }
+        .campaign-title em { color: #ff5f40; }
+        .hero-answer {
+            display: grid;
+            grid-template-columns: 62px 1fr;
+            gap: 12px;
+            align-items: center;
+            margin: 28px 0 0;
+            padding: 17px 18px;
+            background: #fff;
+            border-left: 6px solid #ff6b4a;
+            box-shadow: 7px 7px 0 #ffd95a;
+        }
+        .hero-answer span { color: #ff5f40; font-size: 10px; font-weight: 900; letter-spacing: .1em; }
+        .hero-answer strong { color: #263451; font-size: 16px; line-height: 1.45; }
+        .campaign-sub { margin-top: 26px; max-width: 440px; color: #46536b; }
+        .outcome-line {
+            margin: 22px 0 20px;
+            background: rgba(255,255,255,.52);
+            border-color: rgba(54,76,126,.18);
+        }
+        .campaign-cta {
+            background: #202d49;
+            box-shadow: 8px 8px 0 #ff7b5d;
+        }
+        .campaign-cta:hover { background: #2f4065; }
+        .campaign-note { color: #5f6c82; }
+        @media (max-width: 430px) {
+            .campaign-hero { min-height: 640px; }
+            .campaign-hero::before { top: 54px; font-size: 152px; }
+            .campaign-copy { padding-top: 50px; }
+            .campaign-title { font-size: 42px; }
+            .hero-answer { grid-template-columns: 54px 1fr; }
+        }
+
+        /* v5 레퍼런스 기반: 단일 대비·실제 자료 중심 */
+        .campaign-hero {
+            min-height: 0;
+            background: #fff;
+        }
+        .campaign-hero::before { display: none; }
+        .hero-copy-clean { padding: 54px 24px 36px; background: #fff; }
+        .hero-copy-clean .hero-label {
+            display: inline-block;
+            margin-bottom: 19px;
+            color: #e83559;
+            font-size: 13px;
+            font-weight: 900;
+        }
+        .hero-copy-clean h1 {
+            color: #171b28;
+            font-size: 40px;
+            line-height: 1.28;
+            letter-spacing: -1.8px;
+            font-weight: 900;
+        }
+        .hero-copy-clean h1 em { color: #e83559; font-style: normal; }
+        .hero-copy-clean .lead {
+            margin-top: 20px;
+            color: #4b5263;
+            font-size: 16px;
+            line-height: 1.78;
+        }
+        .hero-points {
+            display: flex;
+            gap: 16px;
+            margin: 24px 0;
+            padding: 16px 0;
+            border-top: 1px solid #e5e7ec;
+            border-bottom: 1px solid #e5e7ec;
+        }
+        .hero-points span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #31384a;
+            font-size: 12px;
+            font-weight: 800;
+        }
+        .hero-points i { color: #e83559; font-size: 10px; }
+        .hero-copy-clean .campaign-cta {
+            box-shadow: none;
+            background: #171b28;
+            border-radius: 0;
+        }
+        .hero-copy-clean .campaign-note { text-align: left; }
+        .hero-report-visual {
+            position: relative;
+            height: 385px;
+            overflow: hidden;
+            background: #3157cf;
+        }
+        .hero-report-visual::before {
+            content: "RESULT REPORT";
+            position: absolute;
+            left: 24px;
+            top: 23px;
+            color: rgba(255,255,255,.72);
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: .14em;
+        }
+        .hero-report-visual::after {
+            content: "점수가 아니라, 보완할 지점까지";
+            position: absolute;
+            left: 24px;
+            bottom: 23px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 900;
+        }
+        .hero-report-card {
+            position: absolute;
+            overflow: hidden;
+            background-color: #fff;
+            background-image: url('report-source-actual.png');
+            background-repeat: no-repeat;
+            border: 8px solid #fff;
+            box-shadow: 0 18px 34px rgba(10,27,79,.28);
+        }
+        .hero-report-card.card-a {
+            left: 32px;
+            top: 76px;
+            width: 175px;
+            height: 224px;
+            background-size: 720px auto;
+            background-position: -28px -77px;
+            transform: rotate(-3deg);
+        }
+        .hero-report-card.card-b {
+            right: 31px;
+            top: 62px;
+            width: 178px;
+            height: 220px;
+            background-size: 720px auto;
+            background-position: -357px -77px;
+            transform: rotate(3deg);
+        }
+        .hero-report-tag {
+            position: absolute;
+            right: 20px;
+            bottom: 56px;
+            z-index: 2;
+            padding: 9px 12px;
+            background: #f7d83d;
+            color: #171b28;
+            font-size: 11px;
+            font-weight: 900;
+        }
+        .actual-report-stage {
+            margin-top: 30px;
+            padding: 18px;
+            background: #fff;
+            border: 1px solid #dce2ee;
+        }
+        .actual-report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .actual-report-crop {
+            position: relative;
+            height: 226px;
+            overflow: hidden;
+            background-color: #f8fafc;
+            background-image: url('report-source-actual.png');
+            background-repeat: no-repeat;
+            background-size: 880px auto;
+            border: 1px solid #e5e7ec;
+        }
+        .actual-report-crop::after {
+            position: absolute;
+            left: 9px;
+            bottom: 9px;
+            padding: 6px 8px;
+            background: #171b28;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 900;
+        }
+        .crop-1 { background-position: -33px -92px; }
+        .crop-1::after { content: "01 학력진단"; }
+        .crop-2 { background-position: -236px -92px; }
+        .crop-2::after { content: "02 학력인증"; }
+        .crop-3 { background-position: -449px -92px; }
+        .crop-3::after { content: "03 진단 리포트"; }
+        .crop-4 { background-position: -650px -92px; }
+        .crop-4::after { content: "04 전국 비교"; }
+        .report-showcase { padding-left: 24px; padding-right: 24px; background: #f4f6fa; }
+        .report-showcase .editorial-kicker { color: #e83559; }
+        .report-showcase .editorial-title mark { background: linear-gradient(transparent 62%, #f4d83e 62%); }
+        .report-caption div { border-radius: 0; box-shadow: none; }
+        .report-caption b { color: #3157cf; }
+        @media (max-width: 430px) {
+            .hero-copy-clean h1 { font-size: 36px; }
+            .hero-report-visual { height: 350px; }
+            .hero-report-card.card-a { left: 22px; width: 160px; }
+            .hero-report-card.card-b { right: 22px; width: 160px; }
+            .actual-report-crop { height: 205px; }
+        }
+
+        /* 2026 가을학기 통합 캠페인 최종 디자인 시스템 */
+        .newlp {
+            --lp-ink: #202a42;
+            --lp-accent: #e8523e;
+            --lp-blue: #30456f;
+            --lp-yellow: #f4d35e;
+            --lp-line: #dedfdc;
+            --lp-muted: #596170;
+            color: var(--lp-ink);
+            background: #fff;
+        }
+        .newlp section {
+            position: relative;
+            padding: 60px 30px;
+            text-align: center;
+        }
+        .newlp-kicker {
+            display: block;
+            min-height: 0;
+            margin: 0 auto 16px;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            color: var(--lp-accent);
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: .08em;
+        }
+        .newlp h1, .newlp h2, .newlp h3 { color: var(--lp-ink); letter-spacing: -1px; }
+        .newlp h1 { font-size: 42px; line-height: 1.25; font-weight: 900; }
+        .newlp h1 em { color: var(--lp-accent); font-style: normal; }
+        .newlp h2 { font-size: 31px; line-height: 1.42; font-weight: 900; }
+        .newlp h2 mark { color: var(--lp-accent); background: none; }
+        .newlp-lead {
+            max-width: 540px;
+            margin: 18px auto 0;
+            color: var(--lp-muted);
+            font-size: 15px;
+            line-height: 1.85;
+        }
+        .newlp-hero {
+            padding-top: 56px !important;
+            background: #fffaf2;
+        }
+        .newlp-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 310px;
+            margin-top: 36px;
+            border: 1px dashed #959dae;
+            border-radius: 18px;
+            background: rgba(255,255,255,.72);
+            color: #767e8d;
+            text-align: center;
+        }
+        .newlp-placeholder .code { margin-bottom: 9px; color: #a2a8b3; font-size: 10px; font-weight: 900; letter-spacing: .12em; }
+        .newlp-placeholder strong { color: #555e70; font-size: 16px; }
+        .newlp-placeholder p { margin-top: 8px; font-size: 12px; line-height: 1.55; }
+        .newlp-photo {
+            overflow: hidden;
+            aspect-ratio: 3 / 2;
+            margin-top: 30px;
+            border-radius: 8px;
+            background: #e9edf5;
+            box-shadow: 0 10px 24px rgba(32,42,66,.1);
+        }
+        .newlp-photo img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .newlp-hero .newlp-photo { margin-bottom: 24px; }
+        .newlp-chat {
+            margin: 28px 0 18px;
+            padding: 16px;
+            border: 1px solid #d8dde6;
+            border-radius: 12px;
+            background: #e9edf3;
+            text-align: left;
+        }
+        .newlp-chat-title {
+            margin-bottom: 18px;
+            color: #6f7684;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: .04em;
+            text-align: center;
+        }
+        .newlp-message {
+            max-width: 84%;
+            margin-top: 7px;
+        }
+        .newlp-message:first-of-type { margin-top: 0; }
+        .newlp-message.parent { margin-right: auto; }
+        .newlp-message.answer { margin-left: auto; }
+        .newlp-message-name {
+            display: block;
+            margin: 0 0 3px 5px;
+            color: #707786;
+            font-size: 10px;
+            font-weight: 800;
+        }
+        .newlp-message.answer .newlp-message-name {
+            margin-right: 5px;
+            text-align: right;
+        }
+        .newlp-message p {
+            padding: 10px 13px;
+            border-radius: 15px 15px 15px 4px;
+            background: #fff;
+            color: var(--lp-ink);
+            box-shadow: 0 2px 5px rgba(32,42,66,.07);
+            font-size: 14px;
+            line-height: 1.55;
+        }
+        .newlp-message.answer p {
+            border-radius: 15px 15px 4px 15px;
+            background: var(--lp-yellow);
+            box-shadow: none;
+            font-weight: 800;
+        }
+        .newlp-chat-note {
+            margin: 12px 0 0;
+            color: #7c8390;
+            font-size: 9px;
+            line-height: 1.55;
+            text-align: center;
+        }
+        .newlp-hero-summary {
+            margin: 0 0 20px;
+            color: var(--lp-ink);
+            font-size: 20px;
+            line-height: 1.5;
+            font-weight: 900;
+        }
+        .newlp-cta {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 18px 20px;
+            border-radius: 6px;
+            background: var(--lp-accent);
+            color: #fff;
+            box-shadow: 0 7px 16px rgba(232,82,62,.22);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 900;
+            text-align: center;
+        }
+        .newlp-cta:hover { background: #d44231; }
+        .newlp-cta-note { margin-top: 10px; color: #767d8c; font-size: 11px; }
+        .newlp-reason { background: #f6f6f3; }
+        .newlp-rows {
+            margin-top: 30px;
+            padding: 0;
+            border-top: 2px solid var(--lp-ink);
+            border-bottom: 1px solid var(--lp-line);
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+            text-align: left;
+        }
+        .newlp-row {
+            display: grid;
+            grid-template-columns: 48px 1fr;
+            gap: 12px;
+            padding: 19px 0;
+            border-bottom: 1px solid var(--lp-line);
+        }
+        .newlp-row:last-child { border-bottom: 0; }
+        .newlp-row .num { color: var(--lp-accent); font-size: 22px; line-height: 1.15; font-weight: 900; letter-spacing: -.04em; }
+        .newlp-row strong { display: block; margin-bottom: 6px; font-size: 18px; }
+        .newlp-row p { color: var(--lp-muted); font-size: 14px; line-height: 1.75; }
+        .newlp-report { background: #fff; }
+        .newlp-report-intro {
+            max-width: 540px;
+            margin: 18px auto 0;
+            color: var(--lp-muted);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        .newlp-report-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+            margin-top: 30px;
+            text-align: left;
+        }
+        .newlp-report-card {
+            overflow: hidden;
+            margin: 0;
+            border: 1px solid #dfe3eb;
+            border-radius: 4px;
+            background: #fff;
+        }
+        .newlp-report-media {
+            display: block;
+            height: 250px;
+            overflow: hidden;
+            padding: 8px;
+            background: #fff;
+        }
+        .newlp-report-card img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            transform: none;
+            transition: none;
+        }
+        .newlp-report-media:hover img { transform: none; }
+        .newlp-report-card figcaption {
+            display: block;
+            min-height: 112px;
+            padding: 15px;
+            border-top: 1px solid #e5e7ec;
+        }
+        .newlp-report-card .no { display: block; margin-bottom: 7px; color: var(--lp-accent); font-size: 11px; font-weight: 900; }
+        .newlp-report-card strong { display: block; margin-bottom: 6px; font-size: 17px; }
+        .newlp-report-card p { color: var(--lp-muted); font-size: 13px; line-height: 1.65; }
+        .newlp-report-note { margin-top: 15px; color: #737b8a; font-size: 11px; line-height: 1.65; text-align: left; }
+        .newlp-consult { background: #f6f6f3; }
+        .newlp-consult .newlp-placeholder { min-height: 280px; }
+        .newlp-flow {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 30px 28px;
+            margin-top: 26px;
+            padding: 0;
+            background: transparent;
+            text-align: center;
+        }
+        .newlp-step {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            min-height: 118px;
+            padding: 16px 10px;
+            border: 1px solid #d8d8d2;
+            border-radius: 3px;
+            background: rgba(255,255,255,.56);
+            box-shadow: none;
+            text-align: center;
+        }
+        .newlp-step:nth-child(3) {
+            grid-column: 2;
+            grid-row: 2;
+        }
+        .newlp-step:nth-child(4) {
+            grid-column: 1;
+            grid-row: 2;
+        }
+        .newlp-step:nth-child(1)::after {
+            content: "→";
+            position: absolute;
+            z-index: 2;
+            top: 50%;
+            right: -26px;
+            width: 22px;
+            height: 28px;
+            color: var(--lp-blue);
+            font-size: 20px;
+            line-height: 28px;
+            font-weight: 900;
+            text-align: center;
+            transform: translateY(-50%);
+        }
+        .newlp-step:nth-child(2)::after {
+            content: "↓";
+            position: absolute;
+            z-index: 2;
+            left: 50%;
+            bottom: -31px;
+            width: 28px;
+            height: 28px;
+            color: var(--lp-blue);
+            font-size: 20px;
+            line-height: 28px;
+            font-weight: 900;
+            text-align: center;
+            transform: translateX(-50%);
+        }
+        .newlp-step:nth-child(3)::after {
+            content: "←";
+            position: absolute;
+            z-index: 2;
+            top: 50%;
+            left: -26px;
+            width: 22px;
+            height: 28px;
+            color: var(--lp-blue);
+            font-size: 20px;
+            line-height: 28px;
+            font-weight: 900;
+            text-align: center;
+            transform: translateY(-50%);
+        }
+        .newlp-step span {
+            display: block;
+            height: auto;
+            padding: 0;
+            border-radius: 0;
+            background: transparent;
+            color: var(--lp-accent);
+            font-size: 11px;
+            line-height: 1;
+            font-weight: 900;
+            letter-spacing: .08em;
+        }
+        .newlp-step strong { display: block; color: var(--lp-ink); font-size: 17px; line-height: 1.45; }
+        .newlp-benefit { background: var(--lp-yellow); color: var(--lp-ink); }
+        .newlp-benefit .newlp-kicker { color: var(--lp-ink); }
+        .newlp-benefit h2 { color: var(--lp-ink); }
+        .newlp-benefits {
+            margin-top: 28px;
+            padding: 0;
+            border-top: 2px solid var(--lp-ink);
+            border-bottom: 1px solid rgba(32,42,66,.22);
+            border-radius: 0;
+            background: transparent;
+            text-align: left;
+        }
+        .newlp-benefit-item {
+            display: grid;
+            grid-template-columns: 48px 1fr;
+            gap: 13px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--lp-line);
+        }
+        .newlp-benefit-item:last-child { border-bottom: 0; }
+        .newlp-benefit-item .num { color: var(--lp-accent); font-size: 17px; font-weight: 900; }
+        .newlp-benefit-item strong { display: block; color: var(--lp-ink); font-size: 17px; }
+        .newlp-benefit-item p { margin-top: 7px; color: var(--lp-muted); font-size: 13px; line-height: 1.7; }
+        .newlp-final { background: #1a1738; color: #fff; }
+        .newlp-final h2 { color: #fff; }
+        .newlp-final p { margin: 14px 0 26px; color: rgba(255,255,255,.82); font-size: 14px; line-height: 1.75; }
+        .newlp-final .newlp-cta { background: var(--lp-accent); color: #fff; }
+        @media (max-width: 430px) {
+            .top-header { padding: 11px 12px; gap: 8px; }
+            .top-logo { height: 25px; }
+            .top-brand-logos { gap: 5px; }
+            .top-brand-logos .logo-u2m { height: 21px; }
+            .top-brand-logos .logo-academy { height: 20px; }
+            .top-brand-logos .logo-glec { height: 21px; }
+            .newlp section { padding: 48px 24px; }
+            .newlp h1 { font-size: 36px; }
+            .newlp h2 { font-size: 27px; }
+            .newlp-lead { font-size: 15px; }
+            .newlp-placeholder { min-height: 250px; }
+            .newlp-photo { margin-top: 26px; border-radius: 6px; }
+            .newlp-flow { gap: 32px 22px; }
+            .newlp-step { min-height: 112px; padding: 14px 7px; }
+            .newlp-step:nth-child(1)::after { right: -22px; }
+            .newlp-step:nth-child(3)::after { left: -22px; }
+            .newlp-step span { font-size: 10px; }
+            .newlp-step strong { font-size: 15px; }
+            .newlp-report-list { gap: 12px; }
+            .newlp-report-media { height: 220px; }
+            .newlp-report-card figcaption { min-height: 128px; padding: 13px; }
+            .newlp-report-card strong { font-size: 15px; }
+            .newlp-report-card p { font-size: 11px; }
+            .newlp-message { max-width: 88%; }
+            .newlp-message p { font-size: 13px; }
+            .newlp-hero-summary { font-size: 18px; }
+        }
+    </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GQLE2L3HRB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-GQLE2L3HRB');
+</script>
+</head>
+<body>
+<div class="wrap">
+
+    <!-- Header -->
+    <header class="top-header">
+        <img class="top-logo" src="logo_edu.png" alt="올림피아드교육">
+        <div class="top-brand-logos" aria-label="교육 브랜드">
+            <img class="logo-u2m" src="logo_u2m.png" alt="U2M">
+            <img class="logo-academy" src="logo_academy.png" alt="올림피아드학원">
+            <img class="logo-glec" src="logo_glec.png" alt="GLEC 어학원">
+        </div>
+    </header>
+
+    <main class="newlp">
+        <section class="newlp-hero" id="hero">
+            <p class="newlp-kicker">2026 가을학기 신입생 모집</p>
+            <h1>궁금했던<br>우리 아이의 진짜 실력,<br><em>이제 정확하게<br>확인해 보세요.</em></h1>
+            <p class="newlp-lead">
+                학교 시험 점수만으로는 보이지 않는<br>
+                수학·영어의 실제 학습 상태를 확인해 보세요.
+            </p>
+
+            <div class="newlp-chat" aria-label="학부모의 학습 고민을 표현한 메시지">
+                <div class="newlp-message parent">
+                    <span class="newlp-message-name">학부모 A</span>
+                    <p>학교 시험 점수는 괜찮은데,<br>지금 실력도 괜찮은 걸까요?</p>
+                </div>
+                <div class="newlp-message parent">
+                    <span class="newlp-message-name">학부모 B</span>
+                    <p>문제를 많이 풀어도 비슷한 단원에서<br>계속 막히는 이유가 궁금해요.</p>
+                </div>
+                <div class="newlp-message parent">
+                    <span class="newlp-message-name">학부모 C</span>
+                    <p>2학기에는 무엇부터<br>보완해야 할지 모르겠어요.</p>
+                </div>
+                <div class="newlp-message answer">
+                    <span class="newlp-message-name">올림피아드교육</span>
+                    <p>그 궁금증, 점수 한 줄만으로는 정확히 알기 어렵습니다.<br>학력진단평가로 확인해 보세요.</p>
+                </div>
+            </div>
+
+            <a class="newlp-cta" href="#brand-section">
+                <span>학력진단평가 신청하기</span>
+            </a>
+            <p class="newlp-cta-note">가까운 캠퍼스에서 응시 과목과 희망 일정을 선택하세요.</p>
+        </section>
+
+        <section class="newlp-reason">
+            <p class="newlp-kicker">01 · 진단이 필요한 이유</p>
+            <h2>진도보다 먼저,<br><mark>지금의 위치부터</mark><br>확인해야 합니다.</h2>
+            <p class="newlp-lead">
+                평소에는 문제를 잘 풀어도 특정 단원이나 유형에서 반복적으로 막힐 수 있습니다.
+                점수만으로는 알기 어려운 학습 상태를 구체적으로 확인해 보세요.
+            </p>
+
+            <div class="newlp-rows">
+                <div class="newlp-row">
+                    <span class="num">01</span>
+                    <div>
+                        <strong>현재 수준 확인</strong>
+                        <p>학년별 성취 수준과 비교 지표를 통해 현재 위치를 살펴봅니다.</p>
+                    </div>
+                </div>
+                <div class="newlp-row">
+                    <span class="num">02</span>
+                    <div>
+                        <strong>취약 영역 분석</strong>
+                        <p>단원·영역·난이도별 결과를 통해 부족한 부분을 확인합니다.</p>
+                    </div>
+                </div>
+                <div class="newlp-row">
+                    <span class="num">03</span>
+                    <div>
+                        <strong>학습 순서 설정</strong>
+                        <p>무엇을 먼저 보완해야 하는지 우선순위를 정합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="newlp-report" id="report-preview">
+            <p class="newlp-kicker">02 · 결과 리포트</p>
+            <h2>점수 한 줄이 아니라,<br><mark>아이의 학습 상태를 보여드립니다.</mark></h2>
+            <p class="newlp-report-intro">
+                학력진단평가 결과는 학년별 성취 수준, 단원·영역별 강점과 취약점,
+                문항·난이도별 정오 결과 등 여러 기준으로 세분화해 제공합니다.
+            </p>
+
+            <div class="newlp-report-list">
+                <figure class="newlp-report-card">
+                    <a class="newlp-report-media" href="report-ai-analysis-2026.png" target="_blank" rel="noopener" aria-label="AI 종합 분석 리포트 전체 이미지 보기">
+                        <img src="report-ai-analysis-2026.png" alt="수학 학력진단평가 AI 종합 분석 결과 리포트 예시" loading="lazy">
+                    </a>
+                    <figcaption>
+                        <span class="no">01</span>
+                        <div>
+                            <strong>AI 종합 분석</strong>
+                            <p>문항·단원·영역·난이도별 결과를 종합해 학습 상태와 보완 방향을 설명합니다.</p>
+                        </div>
+                    </figcaption>
+                </figure>
+
+                <figure class="newlp-report-card">
+                    <a class="newlp-report-media" href="report-unit-2026.png" target="_blank" rel="noopener" aria-label="단원별 분석 리포트 전체 이미지 보기">
+                        <img src="report-unit-2026.png" alt="수학 학력진단평가 단원별 분석 결과 리포트 예시" loading="lazy">
+                    </a>
+                    <figcaption>
+                        <span class="no">02</span>
+                        <div>
+                            <strong>단원별 분석</strong>
+                            <p>단원별 정답률과 전국 정답률을 비교해 강점과 보완이 필요한 단원을 확인합니다.</p>
+                        </div>
+                    </figcaption>
+                </figure>
+
+                <figure class="newlp-report-card">
+                    <a class="newlp-report-media" href="report-question-2026.png" target="_blank" rel="noopener" aria-label="문항별 분석 리포트 전체 이미지 보기">
+                        <img src="report-question-2026.png" alt="수학 학력진단평가 문항별 분석 결과 리포트 예시" loading="lazy">
+                    </a>
+                    <figcaption>
+                        <span class="no">03</span>
+                        <div>
+                            <strong>문항별 분석</strong>
+                            <p>각 문항의 단원·행동 영역·난이도와 정오답을 함께 확인합니다.</p>
+                        </div>
+                    </figcaption>
+                </figure>
+
+                <figure class="newlp-report-card">
+                    <a class="newlp-report-media" href="report-domain-difficulty-2026.png" target="_blank" rel="noopener" aria-label="영역 및 난이도별 분석 리포트 전체 이미지 보기">
+                        <img src="report-domain-difficulty-2026.png" alt="수학 학력진단평가 영역 및 난이도별 분석 결과 리포트 예시" loading="lazy">
+                    </a>
+                    <figcaption>
+                        <span class="no">04</span>
+                        <div>
+                            <strong>영역·난이도별 분석</strong>
+                            <p>계산·이해·추론·문제 해결 영역과 난이도별 성취 수준을 비교합니다.</p>
+                        </div>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <p class="newlp-report-note">
+                ※ 현재 제공된 이미지는 수학 결과 리포트 예시입니다.
+                리포트 구성은 학년과 응시 과목에 따라 달라질 수 있습니다.
+            </p>
+        </section>
+
+        <section class="newlp-consult">
+            <p class="newlp-kicker">03 · 결과 상담</p>
+            <h2>결과를 확인한 다음이<br><mark>더 중요합니다.</mark></h2>
+            <p class="newlp-lead">
+                평가 결과를 전달하는 데서 끝나지 않습니다.<br>
+                전문 상담을 통해 현재 수준과 취약 영역을 함께 살펴보고,<br>
+                학생에게 필요한 보완 내용과 적합한 수업 방향을 안내합니다.
+            </p>
+
+            <div class="newlp-photo">
+                <img src="consulting-ai.png" alt="학력진단평가 결과 리포트를 함께 살펴보는 학생, 학부모와 선생님" loading="lazy">
+            </div>
+
+            <div class="newlp-flow" aria-label="학력진단평가 상담 과정">
+                <div class="newlp-step">
+                    <span>STEP 01</span>
+                    <strong>학력진단평가</strong>
+                </div>
+                <div class="newlp-step">
+                    <span>STEP 02</span>
+                    <strong>결과 리포트</strong>
+                </div>
+                <div class="newlp-step">
+                    <span>STEP 03</span>
+                    <strong>1:1 상담</strong>
+                </div>
+                <div class="newlp-step">
+                    <span>STEP 04</span>
+                    <strong>2학기 학습 방향 제안</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="newlp-benefit">
+            <p class="newlp-kicker">04 · 신청 혜택</p>
+            <h2>가을학기 신입생을 위한<br>학력진단평가 혜택</h2>
+
+            <div class="newlp-benefits">
+                <div class="newlp-benefit-item">
+                    <span class="num">01</span>
+                    <div>
+                        <strong>학력진단평가 응시료 전액 지원</strong>
+                        <p>가을학기 신입생을 위한 학력진단평가 응시료를 지원합니다.</p>
+                    </div>
+                </div>
+                <div class="newlp-benefit-item">
+                    <span class="num">02</span>
+                    <div>
+                        <strong>결과 리포트 제공 및 1:1 컨설팅</strong>
+                        <p>결과를 구체적으로 확인하고 2학기 학습 방향을 상담합니다.</p>
+                    </div>
+                </div>
+                <div class="newlp-benefit-item">
+                    <span class="num">03</span>
+                    <div>
+                        <strong>GS25 모바일 상품권 1만원권</strong>
+                        <p>학력진단평가 응시 완료 시 모바일 상품권을 증정합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Application Form -->
+    <section class="form-section" id="brand-section">
+        <p class="sec-tag">응시료 전액 지원</p>
+        <h2 class="sec-title" style="margin-bottom:8px;">학력진단평가<br>신청하기</h2>
+        <p style="font-size:15px;color:#777;margin-bottom:28px;">캠퍼스와 전형과목을 선택하면 응시 가능한 일정이 표시됩니다.</p>
+
+        <form id="applicationForm" class="form-wrap">
+            <div class="form-grid" style="margin-bottom:18px;">
+                <div class="form-field" style="margin-bottom:0;">
+                    <label>학생명 <b>*</b></label>
+                    <input name="studentName" required placeholder="예: 김민준">
+                </div>
+                <div class="form-field" style="margin-bottom:0;">
+                    <label>연락처 <b>*</b></label>
+                    <input name="phone" type="tel" required placeholder="010-0000-0000">
+                </div>
+            </div>
+            <div class="form-grid" style="margin-bottom:18px;">
+                <div class="form-field" style="margin-bottom:0;">
+                    <label>학년 <b>*</b></label>
+                    <select name="grade" required>
+                        <option value="">선택</option>
+                        <option>초3</option><option>초4</option><option>초5</option><option>초6</option>
+                        <option>중1</option><option>중2</option><option>중3</option>
+                        <option>고1</option><option>고2</option><option>고3</option>
+                    </select>
+                </div>
+                <div class="form-field" style="margin-bottom:0;">
+                    <label>학교명 <b>*</b></label>
+                    <input name="school" required placeholder="학교명">
+                </div>
+            </div>
+            <div class="form-grid" style="margin-bottom:18px;">
+                <div class="form-field" style="margin-bottom:0;">
+                    <label>캠퍼스 <b>*</b></label>
+                    <select id="campusSelect" name="campus" required>
+                        <option value="">캠퍼스 선택</option>
+                    </select>
+                </div>
+                <div class="form-field" style="margin-bottom:0;">
+                    <label>전형과목 <b>*</b></label>
+                    <select id="subjectSelect" name="subject" required disabled>
+                        <option value="">캠퍼스를 먼저 선택</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="cal-wrap">
+                <div class="cal-head">
+                    <button id="prevMonthButton" type="button" aria-label="이전 달">‹</button>
+                    <strong id="monthTitle">2026.8</strong>
+                    <button id="nextMonthButton" type="button" aria-label="다음 달">›</button>
+                </div>
+                <div class="cal-days-header">
+                    <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+                </div>
+                <div id="calendarDays" class="cal-days"></div>
+            </div>
+
+            <div class="time-wrap">
+                <h4>희망시간 선택</h4>
+                <div id="timeList" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+            </div>
+
+            <div class="date-row">
+                <div class="date-box">
+                    <div class="lbl">희망날짜</div>
+                    <strong id="selectedDateText">날짜 선택 전</strong>
+                </div>
+                <div class="date-box">
+                    <div class="lbl">희망시간</div>
+                    <strong id="selectedTimeText">시간 선택 전</strong>
+                </div>
+            </div>
+
+            <input type="hidden" name="region" value="서울특별시">
+            <input type="hidden" name="referralSource" value="기타">
+            <input type="hidden" name="referralDetail" value="랜딩">
+
+            <p class="form-note">※ 캠퍼스에서 확인을 위해 연락을 드릴 수 있습니다.</p>
+            <p id="submitStatus" class="form-status" role="status" aria-live="polite"></p>
+
+            <div class="privacy-consent">
+                <details class="privacy-details">
+                    <summary>
+                        <span class="privacy-summary-title">개인정보 수집 및 이용 동의</span>
+                        <span class="privacy-summary-hint">내용 보기</span>
+                    </summary>
+                    <div class="privacy-box" tabindex="0">
+                        <p>(주)올림피아드교육은 고객상담과 학력진단 및 설명회 신청시 다음과 같이 개인정보를 수집하고 있습니다. 수집한 개인정보는 “개인정보보호법”에 따라 보호하며, 개인정보 수집·이용목적 외로 처리하거나 정보주체의 동의 없이 외부에 제공 및 공유하지 않습니다. 또한, 개인정보가 분실·도난·유출·변조·훼손되지 않도록 안정성 확보에 필요한 조치를 취합니다.</p>
+                        <h4>1. 수집하는 개인정보 항목</h4>
+                        <p>(필수) 학생명, 연락처(자택 또는 휴대폰)<br>(선택) 학년, 학교명, 학부모이름, 이메일, 상담구분, 알게된 경로</p>
+                        <h4>2. 개인정보의 수집 및 이용목적</h4>
+                        <p>가. 고객 문의 응대 및 상담<br>나. 설명회 신청 참석 대상자 확인<br>다. 학력진단 신청 및 접수</p>
+                        <h4>3. 개인정보의 보유 및 이용기간</h4>
+                        <p>원칙적으로 개인정보의 수집 및 이용 목적이 달성된 후에는 이용자의 개인정보를 지체 없이 파기 합니다. 단, 회사 업무 및 통신비밀보호법, 전자상거래법 등 관련 법령에 의한 정보보호 및 보유 필요시 명시 기간 동안 다음과 같은 목적을 위해 보존합니다.</p>
+                        <p>- 상담 및 설명회, 학력진단 업무처리, 분쟁 조정을 위한 기록보존, 불만 처리 등 민원처리, 고지사항 전달, 교육정보 제공</p>
+                        <p>- 서비스 별 이용 및 보유 기간<br>• 입학상담 : 업무 종료후 6개월<br>• 학력진단 : 업무 종료후 6개월<br>• 설명회 : 행사 종료후 10일</p>
+                        <h4>4. 개인정보 수집 · 이용에 대한 동의를 거부하실 수 있습니다.</h4>
+                        <p>단, 필수 항목에 동의하지 않으시면 상담, 설명회, 학력진단 안내에 일부 제한이 있습니다.</p>
+                    </div>
+                </details>
+                <label class="privacy-check">
+                    <input id="privacyAgree" name="privacyAgree" type="checkbox" required>
+                    <span>개인정보 수집 및 이용에 동의합니다. (필수)</span>
+                </label>
+            </div>
+
+            <button id="submitButton" type="submit" class="submit-btn" disabled>
+                신청하기 <i class="fa-solid fa-chevron-right" style="margin-left:6px;font-size:13px;"></i>
+            </button>
+        </form>
+    </section>
+
+    <!-- Campus Guide -->
+    <section class="campus-guide">
+        <h2 class="campus-guide-title">캠퍼스 위치 안내</h2>
+        <p class="campus-guide-desc">가까운 캠퍼스의 위치와 연락처를 확인하실 수 있습니다.</p>
+
+        <div class="campus-group">
+            <h3>올림피아드학원</h3>
+            <div class="campus-list">
+                <div class="campus-item"><span class="campus-name">광진</span><a class="campus-phone" href="tel:024580301">02)458-0301</a><span class="campus-divider">/</span><a class="campus-location" href="https://naver.me/GbDd2W6d" target="_blank" rel="noopener">오시는 길</a></div>
+                <div class="campus-item"><span class="campus-name">성동</span><a class="campus-phone" href="tel:0222947700">02)2294-7700</a><span class="campus-divider">/</span><a class="campus-location" href="https://naver.me/5PV4rDvb" target="_blank" rel="noopener">오시는 길</a></div>
+                <div class="campus-item"><span class="campus-name">동대문</span><a class="campus-phone" href="tel:0222490909">02)2249-0909</a><span class="campus-divider">/</span><a class="campus-location" href="https://naver.me/xq3cEVG8" target="_blank" rel="noopener">오시는 길</a></div>
+                <div class="campus-item"><span class="campus-name">중랑</span><a class="campus-phone" href="tel:024373200">02)437-3200</a><span class="campus-divider">/</span><a class="campus-location" href="https://naver.me/5uIMmPaX" target="_blank" rel="noopener">오시는 길</a></div>
+            </div>
+        </div>
+
+        <div class="campus-group">
+            <h3>GLEC어학원</h3>
+            <div class="campus-list">
+                <div class="campus-item"><span class="campus-name">광진</span><a class="campus-phone" href="tel:024460909">02)446-0909</a><span class="campus-divider">/</span><a class="campus-location" href="https://naver.me/5gFjhuY1" target="_blank" rel="noopener">오시는 길</a></div>
+                <div class="campus-item"><span class="campus-name">성동</span><a class="campus-phone" href="tel:0222940882">02)2294-0882</a><span class="campus-divider">/</span><a class="campus-location" href="https://naver.me/xl057RI3" target="_blank" rel="noopener">오시는 길</a></div>
+                <div class="campus-item"><span class="campus-name">동대문</span><a class="campus-phone" href="tel:0222499009">02)2249-9009</a><span class="campus-divider">/</span><a class="campus-location" href="https://naver.me/FCA2jsLO" target="_blank" rel="noopener">오시는 길</a></div>
+                <div class="campus-item"><span class="campus-name">중랑</span><a class="campus-phone" href="tel:024379800">02)437-9800</a><span class="campus-divider">/</span><a class="campus-location" href="https://naver.me/FhUXFl2q" target="_blank" rel="noopener">오시는 길</a></div>
+            </div>
+        </div>
+
+        <div class="campus-group">
+            <h3>유투엠</h3>
+            <div class="campus-list">
+                <div class="campus-item"><span class="campus-name">중계</span><a class="campus-phone" href="tel:029334600">02)933-4600</a><span class="campus-divider">/</span><a class="campus-location" href="https://naver.me/5Hk0XrZi" target="_blank" rel="noopener">오시는 길</a></div>
+                <div class="campus-item"><span class="campus-name">미사</span><a class="campus-phone" href="tel:03180278833">031)8027-8833</a><span class="campus-divider">/</span><a class="campus-location" href="https://naver.me/5vcEbEtO" target="_blank" rel="noopener">오시는 길</a></div>
+                <div class="campus-item"><span class="campus-name">송파방이</span><a class="campus-phone" href="tel:024067077">02)406-7077</a><span class="campus-divider">/</span><a class="campus-location" href="https://naver.me/5UEPFBXH" target="_blank" rel="noopener">오시는 길</a></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="https://www.u2math.co.kr/Other/SitePrivacy" target="_blank">개인정보처리방침</a>
+            <a href="https://www.u2math.co.kr/Other/SiteTerm" target="_blank">이용약관</a>
+        </div>
+        <div class="footer-info">
+            <p class="name">(주)올림피아드교육</p>
+            <p>대표이사 : 조수경 | 사업자번호 : 206-81-24574</p>
+            <p>주소 : 서울 중랑구 용마산로115길 108</p>
+            <p>통신판매신고 : 제2012-서울중랑-0082호 | 고객센터 : 1899-0949</p>
+        </div>
+        <p class="footer-copy">Copyright &copy; 2026 OLYMPIAD. All Rights Reserved.</p>
+    </footer>
+
+    <div class="page-bottom-pad"></div>
+
+</div>
+
+<div id="stickyCta" class="sticky-cta hidden-bar">
+    <div class="sticky-cta-text">
+        <div class="label">캠퍼스별 희망 일정 선택</div>
+        <div class="value">가을학기 학력진단평가</div>
+    </div>
+    <a class="sticky-cta-btn" href="#brand-section">신청하기</a>
+</div>
+
+<div id="completeModal" class="complete-modal" hidden>
+    <div class="complete-box" role="dialog" aria-modal="true" aria-labelledby="completeTitle">
+        <div class="complete-icon"><i class="fa-solid fa-check"></i></div>
+        <h3 id="completeTitle">신청완료</h3>
+        <p class="complete-note">이 페이지를 캡쳐해서 오시면<br><strong>3가지 혜택</strong>을 받으실 수 있습니다.</p>
+        <p class="complete-caption">※ 캠퍼스에서 확인을 위해 연락을 드릴 수 있습니다.</p>
+        <button id="completeCloseButton" type="button" class="complete-close">확인</button>
+    </div>
+</div>
+
+<script>
+    const hero = document.getElementById('hero');
+    const stickyCta = document.getElementById('stickyCta');
+    const formSection = document.getElementById('brand-section');
+
+    const observer = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting) {
+            stickyCta.classList.remove('hidden-bar');
+        } else {
+            stickyCta.classList.add('hidden-bar');
+        }
+    }, { threshold: 0.1 });
+
+    observer.observe(hero);
+
+    const formObserver = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+            stickyCta.classList.add('hidden-bar');
+        }
+    }, { threshold: 0.3 });
+
+    formObserver.observe(formSection);
+</script>
+
+<script src="config.js?v=20260728-redirect2"></script>
+<script src="schedule-data.js?v=20260729-sheet-schedule"></script>
+<script src="application-form.js?v=20260729-ga-lead"></script>
+</body>
+</html>
