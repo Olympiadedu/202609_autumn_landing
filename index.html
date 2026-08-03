@@ -1145,6 +1145,11 @@
         .newlp h1, .newlp h2, .newlp h3 { color: var(--lp-ink); letter-spacing: -1px; }
         .newlp h1 { font-size: 42px; line-height: 1.25; font-weight: 900; }
         .newlp h1 em { color: var(--lp-accent); font-style: normal; }
+        .newlp .newlp-chat-heading {
+            margin: 0;
+            font-size: 27px;
+            line-height: 1.4;
+        }
         .newlp h2 { font-size: 31px; line-height: 1.42; font-weight: 900; }
         .newlp h2 mark { color: var(--lp-accent); background: none; }
         .newlp-lead {
@@ -1190,7 +1195,7 @@
         }
         .newlp-hero .newlp-photo { margin-bottom: 24px; }
         .newlp-chat {
-            margin: 28px 0 18px;
+            margin: 20px 0 18px;
             padding: 16px;
             border: 1px solid #d8dde6;
             border-radius: 12px;
@@ -1516,11 +1521,7 @@
     <main class="newlp">
         <section class="newlp-hero" id="hero">
             <p class="newlp-kicker">2026 가을학기 신입생 모집</p>
-            <h1>궁금했던<br>우리 아이의 진짜 실력,<br><em>이제 정확하게<br>확인해 보세요.</em></h1>
-            <p class="newlp-lead">
-                학교 시험 점수만으로는 보이지 않는<br>
-                수학·영어의 실제 학습 상태를 확인해 보세요.
-            </p>
+            <h1 class="newlp-chat-heading">우리 아이의 실력,<br>이런 점이 궁금하셨나요?</h1>
 
             <div class="newlp-chat" aria-label="학부모의 학습 고민을 표현한 메시지">
                 <div class="newlp-message parent">
