@@ -1,12 +1,150 @@
 ﻿let database = window.scheduleDatabase;
-database = database || {
-  campuses: [],
-  subjects: [],
+const campaignDataCacheKey = "autumnLandingCampaignDataV1";
+const fallbackCampuses = [
+  {
+    id: "gwangjin",
+    name: "광진캠퍼스",
+    olympiadName: "광진캠퍼스",
+    location: "서울특별시",
+    inputSites: {
+      math: "https://math.olympiad.ac/Exam/Write?idx=75&category=S",
+      english: "https://www.glec.co.kr/Exam/Write?idx=84&category=S",
+    },
+    redirectSites: { math: "https://math.olympiad.ac", english: "https://www.glec.co.kr" },
+  },
+  {
+    id: "seongdong",
+    name: "성동캠퍼스",
+    olympiadName: "성동캠퍼스",
+    location: "서울특별시",
+    inputSites: {
+      math: "https://math.olympiad.ac/Exam/Write?idx=75&category=S",
+      english: "https://www.glec.co.kr/Exam/Write?idx=84&category=S",
+    },
+    redirectSites: { math: "https://math.olympiad.ac", english: "https://www.glec.co.kr" },
+  },
+  {
+    id: "dongdaemun",
+    name: "동대문캠퍼스",
+    olympiadName: "동대문캠퍼스",
+    location: "서울특별시",
+    inputSites: {
+      math: "https://math.olympiad.ac/Exam/Write?idx=75&category=S",
+      english: "https://www.glec.co.kr/Exam/Write?idx=84&category=S",
+    },
+    redirectSites: { math: "https://math.olympiad.ac", english: "https://www.glec.co.kr" },
+  },
+  {
+    id: "jungnang",
+    name: "중랑캠퍼스",
+    olympiadName: "중랑캠퍼스",
+    location: "서울특별시",
+    inputSites: {
+      math: "https://math.olympiad.ac/Exam/Write?idx=75&category=S",
+      english: "https://www.glec.co.kr/Exam/Write?idx=84&category=S",
+    },
+    redirectSites: { math: "https://math.olympiad.ac", english: "https://www.glec.co.kr" },
+  },
+  {
+    id: "songpa",
+    name: "송파방이캠퍼스",
+    olympiadName: "송파방이캠퍼스",
+    location: "서울특별시",
+    inputSites: { math: "https://www.u2math.co.kr/Exam/Write?idx=146&category=S" },
+    redirectSites: { math: "https://www.u2math.co.kr" },
+  },
+  {
+    id: "junggye",
+    name: "중계캠퍼스",
+    olympiadName: "중계캠퍼스",
+    location: "서울특별시",
+    inputSites: { math: "https://www.u2math.co.kr/Exam/Write?idx=146&category=S" },
+    redirectSites: { math: "https://www.u2math.co.kr" },
+  },
+  {
+    id: "misa",
+    name: "미사캠퍼스",
+    olympiadName: "미사캠퍼스",
+    location: "경기도",
+    inputSites: { math: "https://www.u2math.co.kr/Exam/Write?idx=146&category=S" },
+    redirectSites: { math: "https://www.u2math.co.kr" },
+  },
+];
+const fallbackSubjects = [
+  {
+    id: "math",
+    name: "수학",
+    olympiadName: "수학",
+    campusIds: ["gwangjin", "seongdong", "dongdaemun", "jungnang", "songpa", "junggye", "misa"],
+    unavailableSaturdayCampusIds: ["gwangjin"],
+  },
+  {
+    id: "english",
+    name: "영어",
+    olympiadName: "영어",
+    campusIds: ["gwangjin", "seongdong", "dongdaemun", "jungnang"],
+    unavailableSaturdayCampusIds: [],
+  },
+];
+
+function createFallbackSpecialRules() {
+  const rules = [
+    {
+      date: "2026-08-17",
+      campuses: ["전체"],
+      subjects: ["전체"],
+      gradeGroups: ["전체"],
+      status: "휴무",
+      times: [],
+      note: "모든 캠퍼스 미운영",
+    },
+  ];
+  const academyCampuses = ["gwangjin", "seongdong", "dongdaemun", "jungnang"];
+
+  ["2026-08-22", "2026-08-29"].forEach((date, dateIndex) => {
+    academyCampuses.forEach((campusId) => {
+      rules.push(
+        { date, campuses: [campusId], subjects: ["math"], gradeGroups: ["초등", "중등"], status: "신청가능", times: ["12:00"], note: `${dateIndex + 1}차` },
+        { date, campuses: [campusId], subjects: ["english"], gradeGroups: ["초등", "중등"], status: "신청가능", times: ["11:00"], note: `${dateIndex + 1}차` },
+        { date, campuses: [campusId], subjects: ["math", "english"], gradeGroups: ["고등"], status: "신청가능", times: ["14:00"], note: `${dateIndex + 1}차` },
+      );
+    });
+    rules.push(
+      { date, campuses: ["misa"], subjects: ["math"], gradeGroups: ["초등", "중등"], status: "신청가능", times: ["11:00"], note: `${dateIndex + 1}차` },
+      { date, campuses: ["misa"], subjects: ["math"], gradeGroups: ["고등"], status: "신청가능", times: ["14:00"], note: `${dateIndex + 1}차` },
+      { date, campuses: ["junggye"], subjects: ["math"], gradeGroups: ["전체"], status: "신청가능", times: ["14:00"], note: `${dateIndex + 1}차` },
+      { date, campuses: ["songpa"], subjects: ["math"], gradeGroups: ["전체"], status: "신청가능", times: ["11:00"], note: `${dateIndex + 1}차` },
+    );
+  });
+
+  return rules;
+}
+
+const fallbackDatabase = {
+  campuses: fallbackCampuses,
+  subjects: fallbackSubjects,
   scheduleRules: {
-    basic: [],
-    special: [],
+    basic: [
+      { campuses: ["전체"], subjects: ["전체"], gradeGroups: ["전체"], status: "신청가능", times: ["14:00", "15:00", "16:00", "17:00", "18:00", "19:00"], weekdays: ["월~금"] },
+      { campuses: ["전체"], subjects: ["전체"], gradeGroups: ["전체"], status: "신청가능", times: ["11:00", "12:00", "13:00", "14:00", "15:00"], weekdays: ["토"] },
+      { campuses: ["전체"], subjects: ["전체"], gradeGroups: ["전체"], status: "휴무", times: [], weekdays: ["일"] },
+      { campuses: ["gwangjin"], subjects: ["math"], gradeGroups: ["전체"], status: "휴무", times: [], weekdays: ["토"] },
+    ],
+    special: createFallbackSpecialRules(),
   },
 };
+
+function getCachedCampaignData() {
+  try {
+    const cached = JSON.parse(window.localStorage.getItem(campaignDataCacheKey));
+    if (cached?.campuses?.length && cached?.subjects?.length) return cached;
+  } catch (error) {
+    // 저장 데이터가 손상됐거나 저장소 접근이 제한된 경우 기본값을 사용합니다.
+  }
+  return null;
+}
+
+database = database || getCachedCampaignData() || fallbackDatabase;
 const campaignCampusIds = [
   "gwangjin",
   "seongdong",
@@ -285,7 +423,7 @@ function loadJsonp(url, params = {}) {
       delete window[callbackName];
       script.remove();
       reject(new Error("캠퍼스정보 응답 시간이 초과되었습니다."));
-    }, 5000);
+    }, 45000);
 
     window[callbackName] = (data) => {
       window.clearTimeout(timeoutId);
@@ -334,6 +472,11 @@ async function loadRemoteCampusOptions() {
       subjects,
       scheduleRules: hasRemoteScheduleRules ? remoteScheduleRules : database.scheduleRules,
     };
+    try {
+      window.localStorage.setItem(campaignDataCacheKey, JSON.stringify(database));
+    } catch (error) {
+      // 저장소 접근이 제한돼도 현재 화면의 데이터는 그대로 사용합니다.
+    }
   }
 }
 
@@ -368,8 +511,17 @@ async function refreshRemoteScheduleRules() {
   return scheduleRefreshPromise;
 }
 
-function initCampusOptions() {
-  campusSelect.innerHTML = '<option value="">캠퍼스 선택</option>';
+function initCampusOptions(statusMessage = "") {
+  campusSelect.innerHTML = "";
+
+  if (!database.campuses.length) {
+    campusSelect.disabled = true;
+    campusSelect.append(new Option(statusMessage || "캠퍼스 불러오는 중...", ""));
+    return;
+  }
+
+  campusSelect.disabled = false;
+  campusSelect.append(new Option("캠퍼스 선택", ""));
   database.campuses.forEach((campus) => {
     campusSelect.append(new Option(campus.name, campus.id));
   });
@@ -807,6 +959,7 @@ async function boot() {
   initCampusOptions();
   updateSubjectOptions();
   updateSubmitButtonState();
+  isScheduleReady = true;
   renderCalendar();
   renderTimes();
   updateSummary();
@@ -815,8 +968,6 @@ async function boot() {
     await loadRemoteCampusOptions();
   } catch (error) {
     submitStatus.textContent = "";
-  } finally {
-    isScheduleReady = true;
   }
 
   initCampusOptions();
