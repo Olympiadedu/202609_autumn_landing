@@ -201,6 +201,7 @@ const submitButtonDefaultHtml = submitButton.innerHTML;
 let isSubmitting = false;
 let completionRedirectUrl = "";
 let completionSelection = null;
+let completionAnalyticsPromise = Promise.resolve();
 let scheduleRefreshPromise = null;
 let isScheduleReady = false;
 
@@ -396,16 +397,29 @@ function setSubmitting(value) {
 
 function trackApplicationComplete(payload) {
   if (typeof window.gtag !== "function") {
-    return;
+    return Promise.resolve();
   }
 
-  window.gtag("event", "generate_lead", {
-    send_to: "G-GQLE2L3HRB",
-    form_name: "2026 가을학기 학력진단평가 신청",
-    campus_id: payload.campusId,
-    campus_name: payload.campusName,
-    subject_id: payload.subjectId,
-    subject_name: payload.subjectName,
+  return new Promise((resolve) => {
+    let completed = false;
+    const finish = () => {
+      if (completed) return;
+      completed = true;
+      window.clearTimeout(fallbackTimeoutId);
+      resolve();
+    };
+    const fallbackTimeoutId = window.setTimeout(finish, 2500);
+
+    window.gtag("event", "generate_lead", {
+      send_to: "G-GQLE2L3HRB",
+      form_name: "2026 가을학기 학력진단평가 신청",
+      campus_id: payload.campusId,
+      campus_name: payload.campusName,
+      subject_id: payload.subjectId,
+      subject_name: payload.subjectName,
+      event_callback: finish,
+      event_timeout: 2000,
+    });
   });
 }
 
@@ -780,11 +794,14 @@ function closeCompletionModal() {
 
 async function confirmCompletionModal() {
   const redirectPromise = resolveCompletionRedirectUrl();
+  const analyticsPromise = completionAnalyticsPromise;
   completionRedirectUrl = "";
   completionSelection = null;
+  completionAnalyticsPromise = Promise.resolve();
   closeCompletionModal();
 
   const redirectUrl = await redirectPromise;
+  await analyticsPromise;
   if (redirectUrl) {
     window.location.assign(redirectUrl);
   }
@@ -923,7 +940,7 @@ applicationForm.addEventListener("submit", async (event) => {
   try {
     const payload = buildPayload(applicationForm);
     submitStatus.textContent = submitApplication(payload);
-    trackApplicationComplete(payload);
+    completionAnalyticsPromise = trackApplicationComplete(payload);
     showCompletionModal(getCompletionRedirectUrl(), {
       campusId: state.campusId,
       subjectId: state.subjectId,
